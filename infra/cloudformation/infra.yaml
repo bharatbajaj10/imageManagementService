@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  AppName:
+    Type: String
+    Default: image-management-api
+
+Resources:
+
+  DynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: image_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: image_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      TableName: !Sub "image_details"
+
+  ApiBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'myBucket'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      LoggingConfiguration:
+        DestinationBucketName: !Sub 'myBucketLogs'
+        LogFilePrefix: !Sub '${AppName}/logs/'

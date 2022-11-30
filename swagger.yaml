@@ -1,0 +1,134 @@
+openapi: '3.0.3'
+info:
+  version: v1
+  title:
+     Image Management API
+
+paths:
+
+  /swagger:
+    get:
+      description: get the swagger contract
+      operationId: getDocumentationGET
+
+      responses:
+        '200':
+          description: successful operation
+      x-is-readonly: true
+      x-amazon-apigateway-auth:
+        type: NONE
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetSwaggerContract.Arn}/invocations'
+        httpMethod: GET
+        type: aws_proxy
+
+  /viewImage:
+    get:
+      summary: get an image by its ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/viewImageOutput'
+        '400':
+          description: Bad request
+      x-is-readonly: true
+      x-amazon-apigateway-auth:
+        type: AWS_IAM
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${#######.Arn}/invocations'
+        httpMethod: POST
+        type: aws_proxy
+
+  /searchImage:
+    post:
+      summary: List all images with filters to refine search.
+      requestBody:
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/searchImageInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchImageInput'
+        '400':
+          description: Bad request
+      x-is-readonly: true
+      x-amazon-apigateway-auth:
+        type: AWS_IAM
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${########.Arn}/invocations'
+        httpMethod: POST
+        type: aws_proxy
+
+  /uploadImage:
+    post:
+      summary: upload a image with meta data
+      requestBody:
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/uploadImageInput'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+      x-is-readonly: true
+      x-amazon-apigateway-auth:
+        type: AWS_IAM
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${########.Arn}/invocations'
+        httpMethod: POST
+        type: aws_proxy
+
+components:
+  schemas:
+    searchImageInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        userName:
+          type: string
+        fileName:
+          type: string
+
+    uploadImageInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        userName:
+          type: string
+        imageStr:
+          type: string
+
+    viewImageOutput:
+      type: object

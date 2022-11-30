@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  AppName:
+    Type: String
+    Default: image-management-api
+  LambdaBucketName:
+    Type: String
+    Default: image-management-api-deploy
+
+Resources:
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AppName}-${AWS::Region}'
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+                - "apigateway.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "PPTLambdaVpcPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "dynamodb:*"
+                  - "s3:*"
+                Resource: "*"
+
+  RestAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: "image-management-api"
+      StageName: "dev"
+      EndpointConfiguration: REGIONAL
+      Auth:
+        DefaultAuthorizer: AWS_IAM
+      DefinitionBody:
+        'Fn::Transform':
+          Name: 'AWS::Include'
+          Parameters:
+            Location: !Join [ '', [ 's3://',!Ref LambdaBucketName,'/',!Ref AppName,'/swagger.yaml' ] ]
+
+
+  GetSwaggerContract:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AppName}-swagger'
+      CodeUri: image-management-api/build
+      Handler: src.rest_api.get_swagger.lambda_handler
+      MemorySize: 256
+      Timeout: 35
+      Runtime: python3.9
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        SubscribeToEvents:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref RestAPI
+            Path: /swagger
+            Method: get
+
+  uploadImageLamda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AppName}-upload-img'
+      CodeUri: image-management-api/build
+      Handler: src.rest_api.upload_image.lambda_handler
+      MemorySize: 256
+      Timeout: 35
+      Runtime: python3.9
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        SubscribeToEvents:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref RestAPI
+            Path: /swagger
+            Method: get
+
+  searchImageLamda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AppName}-upload-img'
+      CodeUri: image-management-api/build
+      Handler: src.rest_api.search_image.lambda_handler
+      MemorySize: 256
+      Timeout: 35
+      Runtime: python3.9
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        SubscribeToEvents:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref RestAPI
+            Path: /swagger
+            Method: get
+
+  viewImageLamda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AppName}-upload-img'
+      CodeUri: image-management-api/build
+      Handler: src.rest_api.view_image.lambda_handler
+      MemorySize: 256
+      Timeout: 35
+      Runtime: python3.9
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        SubscribeToEvents:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref RestAPI
+            Path: /swagger
+            Method: get
