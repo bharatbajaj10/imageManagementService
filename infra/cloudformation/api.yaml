@@ -69,7 +69,7 @@ Resources:
             Path: /swagger
             Method: get
 
-  uploadImageLamda:
+  uploadImageLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub '${AppName}-upload-img'
@@ -84,10 +84,10 @@ Resources:
           Type: HttpApi
           Properties:
             ApiId: !Ref RestAPI
-            Path: /swagger
-            Method: get
+            Path: /upload
+            Method: post
 
-  searchImageLamda:
+  searchImageLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub '${AppName}-upload-img'
@@ -102,10 +102,10 @@ Resources:
           Type: HttpApi
           Properties:
             ApiId: !Ref RestAPI
-            Path: /swagger
-            Method: get
+            Path: /search
+            Method: post
 
-  viewImageLamda:
+  viewImageLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub '${AppName}-upload-img'
@@ -120,5 +120,5 @@ Resources:
           Type: HttpApi
           Properties:
             ApiId: !Ref RestAPI
-            Path: /swagger
+            Path: /view
             Method: get

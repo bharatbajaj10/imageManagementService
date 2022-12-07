@@ -4,7 +4,7 @@ import boto3
 import base64
 
 
-BUCKET = os.getenv('BUCKET_NAME', 'myBucket')
+BUCKET = os.getenv('BUCKET_NAME', 'matt-s3-test')
 
 
 def upload_image_to_s3(image_id, file_name, decoded_image):

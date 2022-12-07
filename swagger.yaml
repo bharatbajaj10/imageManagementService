@@ -46,7 +46,7 @@ paths:
           default:
             statusCode: 200
         uri:
-          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${#######.Arn}/invocations'
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${viewImageLambda.Arn}/invocations'
         httpMethod: POST
         type: aws_proxy
 
@@ -75,7 +75,7 @@ paths:
           default:
             statusCode: 200
         uri:
-          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${########.Arn}/invocations'
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${searchImageLambda.Arn}/invocations'
         httpMethod: POST
         type: aws_proxy
 
@@ -100,7 +100,7 @@ paths:
           default:
             statusCode: 200
         uri:
-          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${########.Arn}/invocations'
+          'Fn::Sub': 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${uploadImageLambda.Arn}/invocations'
         httpMethod: POST
         type: aws_proxy
 
