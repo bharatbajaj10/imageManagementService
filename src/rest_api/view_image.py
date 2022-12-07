@@ -58,5 +58,5 @@ def _process_request(image_id):
     image_str = s3_helper.download_image(file_name)
     return {
         "statusCode": 200,
-        "body": image_str
+        "body": json.dumps(image_str)
     }
