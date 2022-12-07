@@ -20,4 +20,4 @@ def download_image(file_name):
 
 
 def _encode_image_into_base64(image_content):
-    return base64.b64encode(image_content)
+    return base64.b64encode(image_content).decode("utf-8")
