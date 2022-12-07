@@ -16,7 +16,7 @@ def download_image(file_name):
     s3_client = boto3.client('s3')
     data = s3_client.get_object(Bucket=BUCKET, Key=file_name)
     contents = data['Body'].read()
-    return _encode_image_into_base64(contents)
+    return {"image": _encode_image_into_base64(contents)}
 
 
 def _encode_image_into_base64(image_content):

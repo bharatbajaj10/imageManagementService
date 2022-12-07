@@ -47,7 +47,8 @@ def lambda_handler(event, context=None):
 
 
 def _process_request(image_id):
-    file_name = db_helper.query_image(image_id)
+    query_result = db_helper.query_image(image_id)
+    file_name = query_result.get('fileName') if query_result else None
     if not file_name:
         return {
             "statusCode": 404,
