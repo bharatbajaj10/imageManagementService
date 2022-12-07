@@ -32,7 +32,7 @@ def search_image(title, description, user_name, fileName):
     if fileName:
         condition = Attr("fileName").eq(fileName)
         filter_exp = filter_exp & condition if filter_exp is not None else condition
-    result = table.scan(FilterExpression=filter_exp)
+    result = table.scan(FilterExpression=filter_exp) if filter_exp else table.scan()
     return result['Items']
 
 
