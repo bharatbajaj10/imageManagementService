@@ -19,7 +19,6 @@ def lambda_handler(event, context=None):
             raise ValueError({
                 "Invalid request - Missing required input(s)",
             })
-        query_string_params = json.loads(query_string_params)
         image_id = query_string_params.get('imageId')
         if not image_id:
             raise ValueError({

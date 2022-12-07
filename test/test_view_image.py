@@ -23,7 +23,6 @@ class ViewImageTest(unittest.TestCase):
                          }
         boto3_dynamo.resource.return_value.Table.return_value.query.return_value = mock_response
         s3_boto.client.return_value.get_object.return_value = {'Body': _get_mock_image()}
-        body = json.dumps({"imageId": "TestImage"})
-        event = {'queryStringParameters': body}
+        event = {'queryStringParameters': {"imageId": "TestImage"}}
         response = lambda_handler(event, None)
         self.assertIsNotNone(response)
